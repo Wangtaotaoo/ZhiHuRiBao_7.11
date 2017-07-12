@@ -28,7 +28,11 @@
                 android:background="@color/colorPrimary"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
-
+            <!--<android.support.v4.widget.SwipeRefreshLayout-->
+                <!--android:id="@+id/grid_swipe_refresh"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--app:layout_behavior="@string/appbar_scrolling_view_behavior"/>-->
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recycler_view_main_page"
                     android:layout_height="match_parent"
