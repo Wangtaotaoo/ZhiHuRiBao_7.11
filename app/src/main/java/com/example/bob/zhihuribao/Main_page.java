@@ -6,30 +6,26 @@ package com.example.bob.zhihuribao;
 
 public class Main_page {
 
-    private String text_title;
+    private String    text_title;
     private String    images;
+    private String    detail_id;
 
-
-    Main_page(String text_titles,String imagess)
+    Main_page(String text_titles,String imagess,String id)
     {
         text_title=text_titles;
         images = imagess;
+        detail_id = id;
     }
 
-    public void setText_title(String temp_text_title)
-    {
-        text_title = temp_text_title;
-    }
-    public void setImages(String  temp_images)
-    {
-        images=temp_images;
-    }
 
     public String getText_title(){
         return text_title;
     }
     public String   getImages(){
         return  images;
+    }
+    public String getDetail_id(){
+        return detail_id;
     }
 }
 

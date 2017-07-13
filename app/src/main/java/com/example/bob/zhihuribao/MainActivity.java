@@ -1,6 +1,7 @@
 package com.example.bob.zhihuribao;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.NavigationView;
@@ -15,6 +16,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
@@ -32,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
     private List<Main_page> main_pageList = new ArrayList<>();
-    Main_page main_pager = new Main_page("null","null");
+    Main_page main_pager = new Main_page("null","null","null");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -61,13 +64,15 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_main_page);
+        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_main_page);
         LinearLayoutManager layoutManager = new LinearLayoutManager(MyApplication.getContext());
         recyclerView.setLayoutManager(layoutManager);
         Main_Page_Adapter adapter = new Main_Page_Adapter(main_pageList);
         recyclerView.addItemDecoration(new MyDecoration());
         recyclerView.setAdapter(adapter);/**解决NO adapter attached; skipping layout应该放在onCreate方法中*/
     }
+
+
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -90,8 +95,18 @@ public class MainActivity extends AppCompatActivity {
                     LinearLayoutManager layoutManager = new LinearLayoutManager(MyApplication.getContext());
                     recyclerView.setLayoutManager(layoutManager);
                     Main_Page_Adapter adapter = new Main_Page_Adapter(main_pageList);
-                    recyclerView.addItemDecoration(new MyDecoration());
+                    recyclerView.addItemDecoration(new MyDecoration());//添加分割线
                     recyclerView.setAdapter(adapter);/**解决NO adapter attached; skipping layout应该放在onCreate方法中*/
+                    adapter.setOnItemClickListener(new Main_Page_Adapter.OnItemClickListener(){
+                        @Override
+                        public void onItemClick(View view , int position){
+                          String  id_data = main_pageList.get(position).getDetail_id();
+                            Intent intent = new Intent(MainActivity.this,Show_detail.class);
+                            intent.putExtra("my_id",id_data);
+                            Log.d(id_data, "onItemClick: ");
+                            startActivity(intent);
+                        }
+                    });
                     break;
 
             }
@@ -155,11 +170,12 @@ public class MainActivity extends AppCompatActivity {
             for (int i = 0; i < jsonArray1_1.length(); i++) {
                 JSONObject jsonObject1_1_1 = jsonArray1_1.getJSONObject(i);//巡历每个jsonObject.得到jsonObject 整体数据
                 String title_list = jsonObject1_1_1.getString("title");//获得title
+                String id_detail = jsonObject1_1_1.getString("id");
                 JSONArray jsonArray1_1_1 = jsonObject1_1_1.getJSONArray("images");//这个比较特殊，这里面又是一个arrray，只有一个，用0代替
                 String images = jsonArray1_1_1.getString(0);
+                Log.d(id_detail, "parseJSONWithJSONObject:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx ");
 
-
-                main_pager = new Main_page(title_list,images);
+                main_pager = new Main_page(title_list,images,id_detail);
                 Message message = new Message();
                 message.obj = main_pager;
                 message.what = 1;
