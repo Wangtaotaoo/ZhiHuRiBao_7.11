@@ -2,6 +2,7 @@ package com.example.bob.zhihuribao;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.NavigationView;
@@ -52,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeAsUpIndicator(R.drawable.menu_icon);
+
         }
         /**为菜单栏加入监听事件*/
         /**菜单栏*/
@@ -68,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(MyApplication.getContext());
         recyclerView.setLayoutManager(layoutManager);
         Main_Page_Adapter adapter = new Main_Page_Adapter(main_pageList);
-        recyclerView.addItemDecoration(new MyDecoration());
+        recyclerView.addItemDecoration(new MyDecoration());//分割线
         recyclerView.setAdapter(adapter);/**解决NO adapter attached; skipping layout应该放在onCreate方法中*/
     }
 
@@ -76,20 +78,10 @@ public class MainActivity extends AppCompatActivity {
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-
             switch (msg.what) {
                 case 1:
                  Main_page main_page_content =(Main_page)msg.obj;
                     main_pageList.add(main_page_content);
-//                    Main_page main_page_content = new Main_page();
-//                    Log.d(msg.obj.toString(), "handleMessage:////////////////////////////////////////// ");
-//                    main_page_content.setText_title(msg.obj.toString());
-//                    main_pageList.add(main_page_content);
-//                case 2:
-//                    Log.d(msg.obj.toString(), "handleMessage: ++++++++++++++++++++++++++++++++++++++++");
-//                    Main_page main_page_images = new Main_page();
-//                    main_page_images.setImages(msg.obj.toString());
-//                    main_pageList.add(main_page_images);
                 default:
                     RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_main_page);
                     LinearLayoutManager layoutManager = new LinearLayoutManager(MyApplication.getContext());
@@ -103,7 +95,6 @@ public class MainActivity extends AppCompatActivity {
                           String  id_data = main_pageList.get(position).getDetail_id();
                             Intent intent = new Intent(MainActivity.this,Show_detail.class);
                             intent.putExtra("my_id",id_data);
-                            Log.d(id_data, "onItemClick: ");
                             startActivity(intent);
                         }
                     });
@@ -173,31 +164,13 @@ public class MainActivity extends AppCompatActivity {
                 String id_detail = jsonObject1_1_1.getString("id");
                 JSONArray jsonArray1_1_1 = jsonObject1_1_1.getJSONArray("images");//这个比较特殊，这里面又是一个arrray，只有一个，用0代替
                 String images = jsonArray1_1_1.getString(0);
-                Log.d(id_detail, "parseJSONWithJSONObject:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx ");
+
 
                 main_pager = new Main_page(title_list,images,id_detail);
                 Message message = new Message();
                 message.obj = main_pager;
                 message.what = 1;
                 handler.sendMessage(message);
-//                Message message = new Message();
-//                message.obj = title_list;
-//                message.obj=images;
-//                message.what = 1;
-//                handler.sendMessage(message);
-
-//                Message message_IMG = new Message();
-//                message_IMG.obj = images;
-//                message_IMG.what= 2;
-//                handler.sendMessage(message_IMG);
-
-
-//                /**顶部滚动*/
-//                JSONArray jsonArray2_1=jsonObject1_1.getJSONArray("top_stories");
-//                for(int j=0;j<=jsonArray2_1.length();j++){
-//                    JSONObject jsonObject2_1_1 = jsonArray2_1.getJSONObject(j);
-//                    String title_roll= jsonObject2_1_1.getString("title");
-//                    String image=jsonObject2_1_1.getString("image");
             }
         } catch (Exception e) {
             e.printStackTrace();

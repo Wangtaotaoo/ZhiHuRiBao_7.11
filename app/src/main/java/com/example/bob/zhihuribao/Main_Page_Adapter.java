@@ -17,18 +17,18 @@ import java.util.List;
  * Created by bob on 17-7-8.
  */
 
-public  class Main_Page_Adapter extends RecyclerView.Adapter<Main_Page_Adapter.ViewHolder>implements
-View.OnClickListener{
+public  class Main_Page_Adapter extends RecyclerView.Adapter<Main_Page_Adapter.ViewHolder>implements View.OnClickListener
+
+{
 
     private List<Main_page> mShow_List;
     private OnItemClickListener mOnItemClickListener = null;
-
-    public static interface OnItemClickListener {//
+    public static interface OnItemClickListener {                       //接口
         void onItemClick(View view , int position);
     }
 
 
-    static class ViewHolder extends RecyclerView.ViewHolder{//持有每个ITEM的界面元素
+    static class ViewHolder extends RecyclerView.ViewHolder{            //持有每个ITEM的界面元素
         ImageView text_Images;
         TextView text_Text_title;
         public ViewHolder(View view){
@@ -49,28 +49,37 @@ View.OnClickListener{
     public ViewHolder onCreateViewHolder(ViewGroup parent , int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.main_page_item, parent, false);
-       final ViewHolder holder = new ViewHolder(view);
-        view.setOnClickListener(this);//
+       final ViewHolder holder = new ViewHolder(view);//固定写法/*LayoutInflater inflater = LayoutInflater.from(context)*/
+        view.setOnClickListener(this);//设置监听事件 /*View view = inflater.inflate(R.layout.item,parent,false)*/
         return  holder;
+
     }
+
+
     @Override
     public void onBindViewHolder(ViewHolder holder ,int position){
-        Main_page main_page = mShow_List.get(position);
- /**加载图片*/       Picasso.with(MyApplication.getContext()).load(main_page.getImages()).into(holder.text_Images);
-  /**加载文字*/      holder.text_Text_title.setText(main_page.getText_title());
-  /**保存position在itemview的tag中*/ holder.itemView.setTag(position);//
+                            Main_page main_page = mShow_List.get(position);
+        /**加载图片*/       Picasso.with(MyApplication.getContext()).load(main_page.getImages()).into
+                            (holder.text_Images);
+        /**加载文字*/        holder.text_Text_title.setText(main_page.getText_title());
+        /**保存position在itemView的tag中*/ holder.itemView.setTag(position);//
     }
-    @Override
+
+
+    @Override//返回界面元素item的个数
     public int getItemCount()  {
         return mShow_List.size();
     }
-    public void onClick(View v) {////
-        if (mOnItemClickListener != null) {
-            //注意这里使用getTag方法获取position
+
+
+
+    public void onClick(View v) {
+        if (mOnItemClickListener != null) {//注意这里使用getTag方法获取position
+
             mOnItemClickListener.onItemClick(v,(int)v.getTag());
         }
     }
-    public void setOnItemClickListener(OnItemClickListener listener) {////
+    public void setOnItemClickListener(OnItemClickListener listener) {
         this.mOnItemClickListener = listener;
     }
 
