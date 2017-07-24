@@ -1,10 +1,12 @@
 package com.example.bob.zhihuribao;
 
+import java.io.Serializable;
+
 /**
  * Created by bob on 17-7-8.
  */
 
-public class Main_page {
+public class Main_page implements Serializable{
 
     private String    text_title;
     private String    images;

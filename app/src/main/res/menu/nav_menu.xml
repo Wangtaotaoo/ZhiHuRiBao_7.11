@@ -4,5 +4,41 @@
         <item
             android:id="@+id/Main_page"
             android:title="首页"/>
+        <item
+            android:id="@+id/Cai_jing"
+            android:title="财经"/>
+        <item
+            android:id="@+id/Xin_li"
+            android:title="日常心理学"/>
+        <item
+            android:id="@+id/Tui_jian"
+            android:title="用户推荐"/>
+        <item
+            android:id="@+id/Movie"
+            android:title="电影日报"/>
+        <item
+            android:id="@+id/Wu_liao"
+            android:title="不许无聊"/>
+        <item
+            android:id="@+id/She_ji"
+            android:title="设计日报"/>
+        <item
+            android:id="@+id/Da_gong_si"
+            android:title="大公司"/>
+        <item
+            android:id="@+id/Hu_lian_wang"
+            android:title="互联网安全"/>
+        <item
+            android:id="@+id/Game"
+            android:title="开始游戏"/>
+        <item
+            android:id="@+id/Music"
+            android:title="音乐日报"/>
+        <item
+            android:id="@+id/Dong_man"
+            android:title="动漫日报"/>
+        <item
+            android:id="@+id/Ti_yu"
+            android:title="体育日报"/>
     </group>
 </menu>
