@@ -91,9 +91,6 @@ public  class Main_Page_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHo
              }
          }
 
-
-
-
         //自定义的viewHolder
     class MyBodyViewHolder extends RecyclerView.ViewHolder{
         TextView text_Text_title;
@@ -117,9 +114,7 @@ public  class Main_Page_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     class MyHeadViewHolder extends RecyclerView.ViewHolder{
-
         ViewPager mvp;
-
         public MyHeadViewHolder(View view){
             super(view);
             mvp =view.findViewById(R.id.vp_headView);

@@ -43,6 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -55,7 +56,10 @@ public class MainActivity extends AppCompatActivity {
     private List<Main_page> main_pageList_header = new ArrayList<>();//存头部的数据
     Main_page main_pager = new Main_page("null","null","null");
     Main_page main_page_header = new Main_page("null","null","null");
-
+//获得今日的日报的时间
+    private  String   date;
+    //设置下滑刷新的次数
+    private  int times=0;
 
 
     //viewpager
@@ -69,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
   //下拉刷新
   private XRecyclerView mRecyclerView;
-    private int refreshTime=0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -200,7 +204,6 @@ default:
                     mRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener(){
                         @Override
                         public void onRefresh(){
-                            refreshTime=refreshTime+1;
                             new Handler().postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
@@ -215,7 +218,9 @@ default:
                         }
 
                         @Override
-                        public void onLoadMore(){//因为没弄历史消息，所以为空语句；
+                        public void onLoadMore(){
+
+                            sendRequestWithOkHttp_history();
                             adapter.notifyDataSetChanged();
                             mRecyclerView.refreshComplete();
                         }
@@ -302,7 +307,8 @@ Intent intent =new Intent(MainActivity.this,Save_SQLitepal.class);
         try {
 
             JSONObject jsonObject1_1 = new JSONObject(jsonData);//总数据
-
+            date = jsonObject1_1.getString("date");
+            Log.d(date, "parseJSONWithJSONObject: +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
             JSONArray jsonArray1_1 = jsonObject1_1.getJSONArray("stories");//array 里面是好多个重复的Object
             for (int i = 0; i < jsonArray1_1.length(); i++) {
                 JSONObject jsonObject1_1_1 = jsonArray1_1.getJSONObject(i);//巡历每个jsonObject.得到jsonObject 整体数据
@@ -318,22 +324,14 @@ Intent intent =new Intent(MainActivity.this,Save_SQLitepal.class);
                 message.what = 1;
                 handler.sendMessage(message);
             }
-
             final JSONArray jsA = jsonObject1_1.getJSONArray("top_stories");//解析得到这三个。
             for(int j =0;j<jsA.length();j++){
                 JSONObject jsO= jsA.getJSONObject(j);
                 final String title_head =jsO.getString("title");
                 final String image_head = jsO.getString("image");
                 final String id_head = jsO.getString("id");
-
-
                 main_page_header = new Main_page(title_head,image_head,id_head);
                 main_pageList_header.add(main_page_header);
-
-
-
-
-
                 Message message_v = new Message();
                 message_v.what=2;
 //                message_v.obj = main_pageList_header;
@@ -376,7 +374,42 @@ Intent intent =new Intent(MainActivity.this,Save_SQLitepal.class);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    private  void  sendRequestWithOkHttp_history(){
+        Log.d("运行了？？？？？ ", "sendRequestWithOkHttp_history: ");
+        int s = Integer.parseInt(date);
+        Log.d(date, "sendRequestWithOkHttp_history:*************************************************** ");
+        HttpUtil.sendOkHttpRequest("https://news-at.zhihu.com/api/4/news/before/"+s,new okhttp3.Callback(){
+            @Override
+            public void onResponse(Call call,Response response)throws IOException{
+                String responseData= response.body().string();
+                para_history(responseData);
+            }
+            public  void onFailure(Call Call,IOException e){
+                //处理异常。
+            }
+        });
+    }
+    private void para_history(String response){
+try{
+    JSONObject json = new JSONObject(response);
+     date = json.getString("date");
+    JSONArray jsonA = json.getJSONArray("stories");
+    for(int k =0;k<jsonA.length();k++){
+        JSONObject json1 = jsonA.getJSONObject(k);
+        String title_history = json1.getString("title");
+        String id_history =json1.getString("id");
+        JSONArray jsonA1 =json1.getJSONArray("images");
+        Log.d(id_history, "para_history: ");
+        String images_history = jsonA1.getString(0);
+        Log.d(images_history, "para_history: ");
 
+        Main_page page_history =new Main_page(title_history,images_history,id_history);
+        main_pageList.add(page_history);
+    }
+}catch (Exception e){
+    e.printStackTrace();
+}
     }
 
 }
